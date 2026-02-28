@@ -1,0 +1,777 @@
+type: sections
+max_columns: 3
+title: LM
+icon: mdi:coffee-maker-outline
+dense_section_placement: false
+background:
+  opacity: 33
+  alignment: center
+  size: cover
+  repeat: repeat
+  attachment: fixed
+  # Replace with your own background image or remove this block entirely
+  # image:
+  #   url: /local/your-background.jpg
+sections:
+  - type: grid
+    cards:
+      - type: custom:button-card
+        entity: switch.YOUR_MACHINE
+        show_name: false
+        show_icon: false
+        tap_action:
+          action: toggle
+        hold_action:
+          action: more-info
+        styles:
+          card:
+            - position: relative
+            - height: 280px
+            - border-radius: 16px
+            - background-image: >-
+                url("https://img.youtube.com/vi/AxWE91DuOw0/maxresdefault.jpg")
+            - background-size: cover
+            - background-position: center
+            - padding: 0
+          custom_fields:
+            dot:
+              - position: absolute
+              - top: 12px
+              - right: 12px
+              - width: 14px
+              - height: 14px
+              - border-radius: 50%
+              - background: |
+                  [[[
+                    return entity.state === "on"
+                      ? "rgba(0, 200, 0, 0.95)"
+                      : "rgba(140, 140, 140, 0.95)";
+                  ]]]
+              - box-shadow: 0 0 0 2px rgba(0,0,0,0.25)
+              - z-index: 2
+              - animation: |
+                  [[[
+                    return entity.state === "on" ? "pulse 1.2s ease-in-out infinite" : "none";
+                  ]]]
+        custom_fields:
+          dot: ' '
+        extra_styles: |
+          @keyframes pulse {
+            0%   { transform: scale(1);   box-shadow: 0 0 0 0 rgba(0, 200, 0, 0.55), 0 0 0 2px rgba(0,0,0,0.25); }
+            70%  { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(0, 200, 0, 0),   0 0 0 2px rgba(0,0,0,0.25); }
+            100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(0, 200, 0, 0),      0 0 0 2px rgba(0,0,0,0.25); }
+          }
+        state:
+          - value: 'on'
+            styles:
+              card:
+                - filter: none
+                - opacity: 1
+          - value: 'off'
+            styles:
+              card:
+                - filter: grayscale(1) brightness(0.75)
+                - opacity: 0.7
+      - type: gauge
+        entity: number.YOUR_MACHINE_soll_temperatur_fur_kaffee
+        needle: true
+        severity:
+          green: 92
+          yellow: 95
+          red: 96
+        grid_options:
+          columns: 6
+          rows: 3
+        name: Brühtemperatur
+        min: 85
+        max: 104
+      - type: custom:button-card
+        entity: select.YOUR_MACHINE_dampf_stufe
+        show_icon: false
+        show_name: false
+        show_state: false
+        tap_action:
+          action: toggle
+          entity: switch.YOUR_MACHINE_dampfkessel
+        hold_action:
+          action: more-info
+        grid_options:
+          columns: 6
+          rows: 3
+        extra_styles: |
+          :host {
+            height: 100% !important;
+            display: block;
+          }
+          ha-card {
+            height: 100% !important;
+          }
+          @keyframes pulse {
+            0%   { transform: scale(1);   box-shadow: 0 0 0 0 rgba(0, 200, 0, 0.55), 0 0 0 2px rgba(0,0,0,0.25); }
+            70%  { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(0, 200, 0, 0),   0 0 0 2px rgba(0,0,0,0.25); }
+            100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(0, 200, 0, 0),      0 0 0 2px rgba(0,0,0,0.25); }
+          }
+        styles:
+          card:
+            - position: relative
+            - height: 100%
+            - border-radius: 16px
+            - padding: 14px 16px
+            - overflow: hidden
+            - box-sizing: border-box
+          grid:
+            - height: 100%
+            - width: 100%
+            - grid-template-areas: '"label dot" "value value"'
+            - grid-template-rows: min-content 1fr
+            - grid-template-columns: 1fr min-content
+            - row-gap: 8px
+            - column-gap: 8px
+            - align-items: center
+          custom_fields:
+            label:
+              - grid-area: label
+              - justify-self: start
+              - align-self: start
+              - font-size: 14px
+              - font-weight: 700
+              - opacity: 0.8
+            dot:
+              - grid-area: dot
+              - justify-self: end
+              - align-self: start
+              - width: 14px
+              - height: 14px
+              - border-radius: 50%
+              - background: |
+                  [[[
+                    return states['switch.YOUR_MACHINE_dampfkessel']?.state === 'on'
+                      ? 'rgba(0, 200, 0, 0.95)'
+                      : 'rgba(140, 140, 140, 0.95)';
+                  ]]]
+              - box-shadow: 0 0 0 2px rgba(0,0,0,0.25)
+              - animation: |
+                  [[[
+                    return states['switch.YOUR_MACHINE_dampfkessel']?.state === 'on'
+                      ? 'pulse 1.2s ease-in-out infinite'
+                      : 'none';
+                  ]]]
+            value:
+              - grid-area: value
+              - justify-self: center
+              - align-self: center
+              - font-size: 72px
+              - font-weight: 800
+              - line-height: 1
+              - text-align: center
+        custom_fields:
+          label: Dampflevel
+          dot: ' '
+          value: |
+            [[[
+              const s = states['select.YOUR_MACHINE_dampf_stufe']?.state ?? '-';
+              const v = Number(s);
+              if (v === 1) return '1';
+              if (v === 2) return '2';
+              if (v === 3) return '3';
+              return s;
+            ]]]
+      - show_name: true
+        show_icon: true
+        type: button
+        tap_action:
+          action: navigate
+          navigation_path: /
+        icon: mdi:countertop
+        grid_options:
+          columns: 12
+          rows: 2
+  - type: grid
+    cards:
+      - type: custom:button-card
+        entity: sensor.YOUR_MACHINE_shot_timer
+        name: Shot Timer
+        icon: mdi:coffee
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: more-info
+        update_interval: 1
+        styles:
+          card:
+            - border-radius: 16px
+            - padding: 16px
+            - height: 140px
+          grid:
+            - grid-template-areas: '"i n" "i value"'
+            - grid-template-columns: 44px 1fr
+            - grid-template-rows: min-content 1fr
+            - column-gap: 12px
+            - row-gap: 6px
+            - align-items: center
+          icon:
+            - width: 34px
+          name:
+            - font-size: 14px
+            - font-weight: 700
+            - opacity: 0.9
+          custom_fields:
+            value:
+              - font-size: 54px
+              - font-weight: 800
+              - line-height: 1.05
+        custom_fields:
+          value: |
+            [[[
+              const s = states['sensor.YOUR_MACHINE_shot_timer']?.state;
+              if (!s || s === 'unknown' || s === 'unavailable') return 'READY';
+              const secs = Math.max(0, Number(s) || 0);
+              return `${secs}s`;
+            ]]]
+      - type: conditional
+        conditions:
+          - entity: switch.YOUR_MACHINE
+            state: 'on'
+        card:
+          type: custom:button-card
+          entity: sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels
+          name: KAFFEEBOILER
+          icon: mdi:coffee-maker
+          show_icon: true
+          show_name: true
+          show_state: false
+          tap_action:
+            action: more-info
+          update_interval: 10
+          styles:
+            card:
+              - border-radius: 16px
+              - padding: 16px
+              - height: 140px
+              - color: var(--primary-text-color)
+              - background: |
+                  [[[
+                    const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                    const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                    if (isUnavailable) return 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))';
+                    const t = new Date(s).getTime();
+                    const now = Date.now();
+                    return (t - now) <= 0
+                      ? 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))'
+                      : 'linear-gradient(135deg, rgba(255,170,0,0.18), rgba(0,0,0,0))';
+                  ]]]
+            grid:
+              - grid-template-areas: '"i n status" "i value value"'
+              - grid-template-columns: 44px 1fr auto
+              - grid-template-rows: min-content 1fr
+              - column-gap: 12px
+              - row-gap: 6px
+              - align-items: center
+            icon:
+              - width: 34px
+              - color: |
+                  [[[
+                    const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                    const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                    if (isUnavailable) return 'rgba(0,200,0,0.95)';
+                    const t = new Date(s).getTime();
+                    const now = Date.now();
+                    return (t - now) <= 0 ? 'rgba(0,200,0,0.95)' : 'rgba(255,170,0,0.95)';
+                  ]]]
+            name:
+              - font-size: 14px
+              - font-weight: 700
+              - opacity: 0.9
+              - justify-self: start
+            custom_fields:
+              status:
+                - justify-self: end
+                - font-size: 12px
+                - font-weight: 700
+                - padding: 4px 10px
+                - border-radius: 999px
+                - color: white
+                - background: |
+                    [[[
+                      const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                      const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                      if (isUnavailable) return 'rgba(0,150,0,0.85)';
+                      const t = new Date(s).getTime();
+                      const now = Date.now();
+                      return (t - now) <= 0 ? 'rgba(0,150,0,0.85)' : 'rgba(180,120,0,0.85)';
+                    ]]]
+              value:
+                - grid-area: value
+                - justify-self: start
+                - align-self: center
+                - font-size: 44px
+                - font-weight: 800
+                - line-height: 1.05
+                - color: |
+                    [[[
+                      const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                      const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                      if (isUnavailable) return 'rgba(0,200,0,0.95)';
+                      const t = new Date(s).getTime();
+                      const now = Date.now();
+                      return (t - now) <= 0 ? 'rgba(0,200,0,0.95)' : 'var(--primary-text-color)';
+                    ]]]
+          custom_fields:
+            status: |
+              [[[
+                const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                if (isUnavailable) return 'READY';
+                const t = new Date(s).getTime();
+                const now = Date.now();
+                return (t - now) <= 0 ? 'READY' : 'HEATING';
+              ]]]
+            value: |
+              [[[
+                const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                if (isUnavailable) return 'Ready';
+                const t = new Date(s).getTime();
+                const now = Date.now();
+                const diffSec = Math.max(0, Math.floor((t - now) / 1000));
+                const mins = Math.ceil(diffSec / 60);
+                return `${mins} min`;
+              ]]]
+      - type: conditional
+        conditions:
+          - entity: switch.YOUR_MACHINE
+            state: 'on'
+          - entity: switch.YOUR_MACHINE_dampfkessel
+            state: 'on'
+        card:
+          type: custom:button-card
+          entity: sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels
+          name: DAMPFBOILER
+          icon: mdi:wind-turbine
+          show_icon: true
+          show_name: true
+          show_state: false
+          tap_action:
+            action: more-info
+          update_interval: 10
+          styles:
+            card:
+              - border-radius: 16px
+              - padding: 16px
+              - height: 140px
+              - color: var(--primary-text-color)
+              - background: |
+                  [[[
+                    const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                    const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                    if (isUnavailable) return 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))';
+                    const t = new Date(s).getTime();
+                    const now = Date.now();
+                    return (t - now) <= 0
+                      ? 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))'
+                      : 'linear-gradient(135deg, rgba(255,170,0,0.18), rgba(0,0,0,0))';
+                  ]]]
+            grid:
+              - grid-template-areas: '"i n status" "i value value"'
+              - grid-template-columns: 44px 1fr auto
+              - grid-template-rows: min-content 1fr
+              - column-gap: 12px
+              - row-gap: 6px
+              - align-items: center
+            icon:
+              - width: 34px
+              - color: |
+                  [[[
+                    const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                    const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                    if (isUnavailable) return 'rgba(0,200,0,0.95)';
+                    const t = new Date(s).getTime();
+                    const now = Date.now();
+                    return (t - now) <= 0 ? 'rgba(0,200,0,0.95)' : 'rgba(255,170,0,0.95)';
+                  ]]]
+            name:
+              - font-size: 14px
+              - font-weight: 700
+              - opacity: 0.9
+              - justify-self: start
+            custom_fields:
+              status:
+                - justify-self: end
+                - font-size: 12px
+                - font-weight: 700
+                - padding: 4px 10px
+                - border-radius: 999px
+                - color: white
+                - background: |
+                    [[[
+                      const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                      const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                      if (isUnavailable) return 'rgba(0,150,0,0.85)';
+                      const t = new Date(s).getTime();
+                      const now = Date.now();
+                      return (t - now) <= 0 ? 'rgba(0,150,0,0.85)' : 'rgba(180,120,0,0.85)';
+                    ]]]
+              value:
+                - grid-area: value
+                - justify-self: start
+                - align-self: center
+                - font-size: 44px
+                - font-weight: 800
+                - line-height: 1.05
+                - color: |
+                    [[[
+                      const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                      const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                      if (isUnavailable) return 'rgba(0,200,0,0.95)';
+                      const t = new Date(s).getTime();
+                      const now = Date.now();
+                      return (t - now) <= 0 ? 'rgba(0,200,0,0.95)' : 'var(--primary-text-color)';
+                    ]]]
+          custom_fields:
+            status: |
+              [[[
+                const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                if (isUnavailable) return 'READY';
+                const t = new Date(s).getTime();
+                const now = Date.now();
+                return (t - now) <= 0 ? 'READY' : 'HEATING';
+              ]]]
+            value: |
+              [[[
+                const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
+                if (isUnavailable) return 'Ready';
+                const t = new Date(s).getTime();
+                const now = Date.now();
+                const diffSec = Math.max(0, Math.floor((t - now) / 1000));
+                const mins = Math.ceil(diffSec / 60);
+                return `${mins} min`;
+              ]]]
+      - clock_style: analog
+        clock_size: small
+        show_seconds: true
+        no_background: false
+        border: false
+        ticks: hour
+        face_style: markers
+        type: clock
+        seconds_motion: continuous
+        grid_options:
+          columns: 12
+          rows: 2
+  - type: grid
+    cards:
+      - type: custom:button-card
+        entity: binary_sensor.YOUR_MACHINE_wassertank_leer
+        name: Wassertank
+        icon: mdi:water
+        show_name: true
+        show_icon: true
+        show_state: false
+        tap_action:
+          action: more-info
+        styles:
+          card:
+            - border-radius: 16px
+            - padding: 16px
+            - height: 110px
+            - background: |
+                [[[
+                  const s = states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state;
+                  return s === 'on'
+                    ? 'linear-gradient(135deg, rgba(220,0,0,0.28), rgba(0,0,0,0))'
+                    : 'linear-gradient(135deg, rgba(0,160,80,0.18), rgba(0,0,0,0))';
+                ]]]
+          grid:
+            - grid-template-areas: '"i n badge" "i msg msg"'
+            - grid-template-columns: 44px 1fr auto
+            - grid-template-rows: min-content 1fr
+            - column-gap: 12px
+            - row-gap: 6px
+            - align-items: center
+          icon:
+            - width: 34px
+            - color: |
+                [[[
+                  return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+                    ? 'rgba(255,60,60,0.95)'
+                    : 'rgba(0,200,0,0.95)';
+                ]]]
+          name:
+            - font-size: 14px
+            - font-weight: 800
+            - justify-self: start
+          custom_fields:
+            badge:
+              - justify-self: end
+              - font-size: 12px
+              - font-weight: 800
+              - padding: 4px 10px
+              - border-radius: 999px
+              - color: white
+              - background: |
+                  [[[
+                    return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+                      ? 'rgba(200,0,0,0.9)'
+                      : 'rgba(0,150,0,0.85)';
+                  ]]]
+              - animation: |
+                  [[[
+                    return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+                      ? 'blink 1s ease-in-out infinite'
+                      : 'none';
+                  ]]]
+            msg:
+              - grid-area: msg
+              - justify-self: start
+              - align-self: center
+              - font-size: 18px
+              - font-weight: 800
+              - letter-spacing: 0.01em
+        custom_fields:
+          badge: |
+            [[[
+              return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+                ? 'EMPTY'
+                : 'OK';
+            ]]]
+          msg: |
+            [[[
+              return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+                ? 'Please refill water tank!'
+                : 'Water tank filled';
+            ]]]
+        extra_styles: |
+          @keyframes blink {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50%      { transform: scale(1.05); opacity: 0.65; }
+          }
+      - type: custom:button-card
+        entity: sensor.YOUR_MACHINE_letzte_reinigungszeit
+        name: Cleaning
+        icon: mdi:spray-bottle
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: more-info
+        update_interval: 60
+        styles:
+          card:
+            - border-radius: 16px
+            - padding: 16px
+            - height: 120px
+            - background: |
+                [[[
+                  const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+                  const isBad = (!s || s === 'unavailable' || s === 'unknown');
+                  if (isBad) return 'linear-gradient(135deg, rgba(120,120,120,0.18), rgba(0,0,0,0))';
+                  const t = new Date(s).getTime();
+                  if (!Number.isFinite(t)) return 'linear-gradient(135deg, rgba(120,120,120,0.18), rgba(0,0,0,0))';
+                  const days = (Date.now() - t) / 86400000;
+                  if (days <= 5) return 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))';
+                  if (days <= 7) return 'linear-gradient(135deg, rgba(255,170,0,0.22), rgba(0,0,0,0))';
+                  return 'linear-gradient(135deg, rgba(220,0,0,0.24), rgba(0,0,0,0))';
+                ]]]
+          grid:
+            - grid-template-areas: '"i n badge" "i value value"'
+            - grid-template-columns: 44px 1fr auto
+            - grid-template-rows: min-content 1fr
+            - column-gap: 12px
+            - row-gap: 6px
+            - align-items: center
+          icon:
+            - width: 34px
+            - color: |
+                [[[
+                  const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+                  if (!s || s === 'unavailable' || s === 'unknown') return 'rgba(140,140,140,0.95)';
+                  const t = new Date(s).getTime();
+                  if (!Number.isFinite(t)) return 'rgba(140,140,140,0.95)';
+                  const days = (Date.now() - t) / 86400000;
+                  if (days <= 5) return 'rgba(0,200,0,0.95)';
+                  if (days <= 7) return 'rgba(255,170,0,0.95)';
+                  return 'rgba(255,60,60,0.95)';
+                ]]]
+          name:
+            - font-size: 14px
+            - font-weight: 800
+            - justify-self: start
+          custom_fields:
+            badge:
+              - justify-self: end
+              - font-size: 12px
+              - font-weight: 800
+              - padding: 4px 10px
+              - border-radius: 999px
+              - color: white
+              - background: |
+                  [[[
+                    const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+                    if (!s || s === 'unavailable' || s === 'unknown') return 'rgba(120,120,120,0.85)';
+                    const t = new Date(s).getTime();
+                    if (!Number.isFinite(t)) return 'rgba(120,120,120,0.85)';
+                    const days = (Date.now() - t) / 86400000;
+                    if (days <= 5) return 'rgba(0,150,0,0.85)';
+                    if (days <= 7) return 'rgba(180,120,0,0.85)';
+                    return 'rgba(200,0,0,0.85)';
+                  ]]]
+            value:
+              - grid-area: value
+              - justify-self: start
+              - align-self: center
+              - font-size: 28px
+              - font-weight: 800
+              - line-height: 1.1
+        custom_fields:
+          badge: |
+            [[[
+              const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+              if (!s || s === 'unavailable' || s === 'unknown') return 'UNKNOWN';
+              const t = new Date(s).getTime();
+              if (!Number.isFinite(t)) return 'UNKNOWN';
+              const days = Math.floor((Date.now() - t) / 86400000);
+              if (days <= 5) return 'OK';
+              if (days <= 7) return 'CLEAN';
+              return 'OVERDUE';
+            ]]]
+          value: |
+            [[[
+              const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+              if (!s || s === 'unavailable' || s === 'unknown') return '—';
+              const t = new Date(s).getTime();
+              if (!Number.isFinite(t)) return '—';
+              const days = Math.floor((Date.now() - t) / 86400000);
+              return `${days} day${days === 1 ? '' : 's'} ago`;
+            ]]]
+      - type: custom:button-card
+        entity: input_datetime.grinder_last_cleaning
+        name: Grinder
+        icon: mdi:shaker
+        show_name: true
+        show_icon: true
+        show_state: false
+        tap_action:
+          action: call-service
+          service: input_datetime.set_datetime
+          target:
+            entity_id: input_datetime.grinder_last_cleaning
+          data:
+            date: '[[[ return new Date().toISOString().slice(0,10); ]]]'
+        styles:
+          card:
+            - border-radius: 16px
+            - padding: 16px
+            - height: 110px
+            - background: |
+                [[[
+                  const s = states['input_datetime.grinder_last_cleaning']?.state;
+                  if (!s) return 'rgba(0,0,0,0.15)';
+                  const last = new Date(s + 'T00:00:00').getTime();
+                  const days = Math.floor((Date.now() - last)/86400000);
+                  if (days <= 15) return 'linear-gradient(135deg, rgba(0,160,80,0.18), rgba(0,0,0,0))';
+                  if (days <= 30) return 'linear-gradient(135deg, rgba(255,160,0,0.22), rgba(0,0,0,0))';
+                  return 'linear-gradient(135deg, rgba(200,0,0,0.28), rgba(0,0,0,0))';
+                ]]]
+          grid:
+            - grid-template-areas: '"i n badge" "i msg msg"'
+            - grid-template-columns: 44px 1fr auto
+            - grid-template-rows: min-content 1fr
+            - column-gap: 12px
+            - row-gap: 6px
+            - align-items: center
+          icon:
+            - width: 34px
+            - color: |
+                [[[
+                  const s = states['input_datetime.grinder_last_cleaning']?.state;
+                  if (!s) return 'gray';
+                  const last = new Date(s + 'T00:00:00').getTime();
+                  const days = Math.floor((Date.now() - last)/86400000);
+                  if (days <= 15) return 'rgba(0,200,100,0.95)';
+                  if (days <= 30) return 'rgba(255,170,0,0.95)';
+                  return 'rgba(255,60,60,0.95)';
+                ]]]
+          name:
+            - font-size: 14px
+            - font-weight: 800
+            - justify-self: start
+            - align-self: center
+          custom_fields:
+            badge:
+              - justify-self: end
+              - font-size: 12px
+              - font-weight: 800
+              - padding: 4px 10px
+              - border-radius: 999px
+              - color: white
+              - background: |
+                  [[[
+                    const s = states['input_datetime.grinder_last_cleaning']?.state;
+                    if (!s) return 'rgba(0,150,0,0.85)';
+                    const last = new Date(s + 'T00:00:00').getTime();
+                    const days = Math.floor((Date.now() - last)/86400000);
+                    if (days <= 15) return 'rgba(0,150,0,0.85)';
+                    if (days <= 30) return 'rgba(180,120,0,0.85)';
+                    return 'rgba(200,0,0,0.85)';
+                  ]]]
+            msg:
+              - grid-area: msg
+              - justify-self: start
+              - align-self: center
+              - font-size: 18px
+              - font-weight: 800
+        custom_fields:
+          badge: |
+            [[[
+              const s = states['input_datetime.grinder_last_cleaning']?.state;
+              if (!s) return 'OK';
+              const last = new Date(s + 'T00:00:00').getTime();
+              const days = Math.floor((Date.now() - last)/86400000);
+              return days > 15 ? 'CLEAN' : 'OK';
+            ]]]
+          msg: |
+            [[[
+              const s = states['input_datetime.grinder_last_cleaning']?.state;
+              if (!s) return '–';
+              const last = new Date(s + 'T00:00:00').getTime();
+              const days = Math.floor((Date.now() - last)/86400000);
+              return `${days} days since cleaning`;
+            ]]]
+        extra_styles: |
+          @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+          }
+      - type: statistic
+        entity: sensor.YOUR_MACHINE_gesamtzahl_zubereiteter_kaffees
+        period:
+          calendar:
+            period: week
+        stat_type: change
+        name: Weekly Shots
+      - type: statistic
+        entity: sensor.YOUR_MACHINE_gesamtzahl_zubereiteter_kaffees
+        period:
+          calendar:
+            period: day
+        stat_type: change
+        name: Daily Shots
+badges:
+  - type: entity
+    show_name: false
+    show_state: true
+    show_icon: true
+    entity: update.YOUR_MACHINE_gateway_firmware
+  - type: entity
+    show_name: false
+    show_state: true
+    show_icon: true
+    entity: sensor.YOUR_MACHINE_gesamtzahl_zubereiteter_kaffees
+  - type: entity
+    show_name: false
+    show_state: true
+    show_icon: true
+    entity: sensor.YOUR_MACHINE_gesamtzahl_durchgefuhrter_spulungen

@@ -1,0 +1,24 @@
+# La Marzocco Shot Timer
+# Add this to your configuration.yaml (or include it via packages/split config)
+#
+# Replace YOUR_MACHINE with your machine's entity prefix (e.g. linea_micra)
+#
+template:
+  - trigger:
+      - platform: time_pattern
+        seconds: "/1"
+    sensor:
+      - name: YOUR_MACHINE Shot Timer
+        unique_id: YOUR_MACHINE_shot_timer
+        state: >
+          {% set s = states('sensor.YOUR_MACHINE_startzeit_des_bruhvorgangs') %}
+          {% if s in ['unknown','unavailable',''] %}
+            READY
+          {% else %}
+            {% set t = as_timestamp(s, default=none) %}
+            {% if t is none %}
+              READY
+            {% else %}
+              {{ (as_timestamp(now()) - t) | int }}
+            {% endif %}
+          {% endif %}
