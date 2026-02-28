@@ -73,7 +73,7 @@ sections:
                 - filter: grayscale(1) brightness(0.75)
                 - opacity: 0.7
       - type: gauge
-        entity: number.YOUR_MACHINE_soll_temperatur_fur_kaffee
+        entity: number.YOUR_MACHINE_coffee_target_temperature
         needle: true
         severity:
           green: 92
@@ -86,13 +86,13 @@ sections:
         min: 85
         max: 104
       - type: custom:button-card
-        entity: select.YOUR_MACHINE_dampf_stufe
+        entity: select.YOUR_MACHINE_steam_level
         show_icon: false
         show_name: false
         show_state: false
         tap_action:
           action: toggle
-          entity: switch.YOUR_MACHINE_dampfkessel
+          entity: switch.YOUR_MACHINE_steam_boiler
         hold_action:
           action: more-info
         grid_options:
@@ -145,14 +145,14 @@ sections:
               - border-radius: 50%
               - background: |
                   [[[
-                    return states['switch.YOUR_MACHINE_dampfkessel']?.state === 'on'
+                    return states['switch.YOUR_MACHINE_steam_boiler']?.state === 'on'
                       ? 'rgba(0, 200, 0, 0.95)'
                       : 'rgba(140, 140, 140, 0.95)';
                   ]]]
               - box-shadow: 0 0 0 2px rgba(0,0,0,0.25)
               - animation: |
                   [[[
-                    return states['switch.YOUR_MACHINE_dampfkessel']?.state === 'on'
+                    return states['switch.YOUR_MACHINE_steam_boiler']?.state === 'on'
                       ? 'pulse 1.2s ease-in-out infinite'
                       : 'none';
                   ]]]
@@ -169,7 +169,7 @@ sections:
           dot: ' '
           value: |
             [[[
-              const s = states['select.YOUR_MACHINE_dampf_stufe']?.state ?? '-';
+              const s = states['select.YOUR_MACHINE_steam_level']?.state ?? '-';
               const v = Number(s);
               if (v === 1) return '1';
               if (v === 2) return '2';
@@ -235,7 +235,7 @@ sections:
             state: 'on'
         card:
           type: custom:button-card
-          entity: sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels
+          entity: sensor.YOUR_MACHINE_coffee_boiler_ready_time
           name: KAFFEEBOILER
           icon: mdi:coffee-maker
           show_icon: true
@@ -252,7 +252,7 @@ sections:
               - color: var(--primary-text-color)
               - background: |
                   [[[
-                    const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                    const s = states['sensor.YOUR_MACHINE_coffee_boiler_ready_time']?.state;
                     const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                     if (isUnavailable) return 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))';
                     const t = new Date(s).getTime();
@@ -272,7 +272,7 @@ sections:
               - width: 34px
               - color: |
                   [[[
-                    const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                    const s = states['sensor.YOUR_MACHINE_coffee_boiler_ready_time']?.state;
                     const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                     if (isUnavailable) return 'rgba(0,200,0,0.95)';
                     const t = new Date(s).getTime();
@@ -294,7 +294,7 @@ sections:
                 - color: white
                 - background: |
                     [[[
-                      const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                      const s = states['sensor.YOUR_MACHINE_coffee_boiler_ready_time']?.state;
                       const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                       if (isUnavailable) return 'rgba(0,150,0,0.85)';
                       const t = new Date(s).getTime();
@@ -310,7 +310,7 @@ sections:
                 - line-height: 1.05
                 - color: |
                     [[[
-                      const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                      const s = states['sensor.YOUR_MACHINE_coffee_boiler_ready_time']?.state;
                       const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                       if (isUnavailable) return 'rgba(0,200,0,0.95)';
                       const t = new Date(s).getTime();
@@ -320,7 +320,7 @@ sections:
           custom_fields:
             status: |
               [[[
-                const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                const s = states['sensor.YOUR_MACHINE_coffee_boiler_ready_time']?.state;
                 const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                 if (isUnavailable) return 'READY';
                 const t = new Date(s).getTime();
@@ -329,7 +329,7 @@ sections:
               ]]]
             value: |
               [[[
-                const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels']?.state;
+                const s = states['sensor.YOUR_MACHINE_coffee_boiler_ready_time']?.state;
                 const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                 if (isUnavailable) return 'Ready';
                 const t = new Date(s).getTime();
@@ -342,11 +342,11 @@ sections:
         conditions:
           - entity: switch.YOUR_MACHINE
             state: 'on'
-          - entity: switch.YOUR_MACHINE_dampfkessel
+          - entity: switch.YOUR_MACHINE_steam_boiler
             state: 'on'
         card:
           type: custom:button-card
-          entity: sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels
+          entity: sensor.YOUR_MACHINE_steam_boiler_ready_time
           name: DAMPFBOILER
           icon: mdi:wind-turbine
           show_icon: true
@@ -363,7 +363,7 @@ sections:
               - color: var(--primary-text-color)
               - background: |
                   [[[
-                    const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                    const s = states['sensor.YOUR_MACHINE_steam_boiler_ready_time']?.state;
                     const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                     if (isUnavailable) return 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))';
                     const t = new Date(s).getTime();
@@ -383,7 +383,7 @@ sections:
               - width: 34px
               - color: |
                   [[[
-                    const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                    const s = states['sensor.YOUR_MACHINE_steam_boiler_ready_time']?.state;
                     const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                     if (isUnavailable) return 'rgba(0,200,0,0.95)';
                     const t = new Date(s).getTime();
@@ -405,7 +405,7 @@ sections:
                 - color: white
                 - background: |
                     [[[
-                      const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                      const s = states['sensor.YOUR_MACHINE_steam_boiler_ready_time']?.state;
                       const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                       if (isUnavailable) return 'rgba(0,150,0,0.85)';
                       const t = new Date(s).getTime();
@@ -421,7 +421,7 @@ sections:
                 - line-height: 1.05
                 - color: |
                     [[[
-                      const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                      const s = states['sensor.YOUR_MACHINE_steam_boiler_ready_time']?.state;
                       const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                       if (isUnavailable) return 'rgba(0,200,0,0.95)';
                       const t = new Date(s).getTime();
@@ -431,7 +431,7 @@ sections:
           custom_fields:
             status: |
               [[[
-                const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                const s = states['sensor.YOUR_MACHINE_steam_boiler_ready_time']?.state;
                 const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                 if (isUnavailable) return 'READY';
                 const t = new Date(s).getTime();
@@ -440,7 +440,7 @@ sections:
               ]]]
             value: |
               [[[
-                const s = states['sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels']?.state;
+                const s = states['sensor.YOUR_MACHINE_steam_boiler_ready_time']?.state;
                 const isUnavailable = (s === 'unavailable' || s === 'unknown' || !s);
                 if (isUnavailable) return 'Ready';
                 const t = new Date(s).getTime();
@@ -464,7 +464,7 @@ sections:
   - type: grid
     cards:
       - type: custom:button-card
-        entity: binary_sensor.YOUR_MACHINE_wassertank_leer
+        entity: binary_sensor.YOUR_MACHINE_water_tank_empty
         name: Wassertank
         icon: mdi:water
         show_name: true
@@ -479,7 +479,7 @@ sections:
             - height: 110px
             - background: |
                 [[[
-                  const s = states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state;
+                  const s = states['binary_sensor.YOUR_MACHINE_water_tank_empty']?.state;
                   return s === 'on'
                     ? 'linear-gradient(135deg, rgba(220,0,0,0.28), rgba(0,0,0,0))'
                     : 'linear-gradient(135deg, rgba(0,160,80,0.18), rgba(0,0,0,0))';
@@ -495,7 +495,7 @@ sections:
             - width: 34px
             - color: |
                 [[[
-                  return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+                  return states['binary_sensor.YOUR_MACHINE_water_tank_empty']?.state === 'on'
                     ? 'rgba(255,60,60,0.95)'
                     : 'rgba(0,200,0,0.95)';
                 ]]]
@@ -513,13 +513,13 @@ sections:
               - color: white
               - background: |
                   [[[
-                    return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+                    return states['binary_sensor.YOUR_MACHINE_water_tank_empty']?.state === 'on'
                       ? 'rgba(200,0,0,0.9)'
                       : 'rgba(0,150,0,0.85)';
                   ]]]
               - animation: |
                   [[[
-                    return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+                    return states['binary_sensor.YOUR_MACHINE_water_tank_empty']?.state === 'on'
                       ? 'blink 1s ease-in-out infinite'
                       : 'none';
                   ]]]
@@ -533,13 +533,13 @@ sections:
         custom_fields:
           badge: |
             [[[
-              return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+              return states['binary_sensor.YOUR_MACHINE_water_tank_empty']?.state === 'on'
                 ? 'EMPTY'
                 : 'OK';
             ]]]
           msg: |
             [[[
-              return states['binary_sensor.YOUR_MACHINE_wassertank_leer']?.state === 'on'
+              return states['binary_sensor.YOUR_MACHINE_water_tank_empty']?.state === 'on'
                 ? 'Please refill water tank!'
                 : 'Water tank filled';
             ]]]
@@ -549,7 +549,7 @@ sections:
             50%      { transform: scale(1.05); opacity: 0.65; }
           }
       - type: custom:button-card
-        entity: sensor.YOUR_MACHINE_letzte_reinigungszeit
+        entity: sensor.YOUR_MACHINE_last_cleaning_time
         name: Cleaning
         icon: mdi:spray-bottle
         show_icon: true
@@ -565,7 +565,7 @@ sections:
             - height: 120px
             - background: |
                 [[[
-                  const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+                  const s = states['sensor.YOUR_MACHINE_last_cleaning_time']?.state;
                   const isBad = (!s || s === 'unavailable' || s === 'unknown');
                   if (isBad) return 'linear-gradient(135deg, rgba(120,120,120,0.18), rgba(0,0,0,0))';
                   const t = new Date(s).getTime();
@@ -586,7 +586,7 @@ sections:
             - width: 34px
             - color: |
                 [[[
-                  const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+                  const s = states['sensor.YOUR_MACHINE_last_cleaning_time']?.state;
                   if (!s || s === 'unavailable' || s === 'unknown') return 'rgba(140,140,140,0.95)';
                   const t = new Date(s).getTime();
                   if (!Number.isFinite(t)) return 'rgba(140,140,140,0.95)';
@@ -609,7 +609,7 @@ sections:
               - color: white
               - background: |
                   [[[
-                    const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+                    const s = states['sensor.YOUR_MACHINE_last_cleaning_time']?.state;
                     if (!s || s === 'unavailable' || s === 'unknown') return 'rgba(120,120,120,0.85)';
                     const t = new Date(s).getTime();
                     if (!Number.isFinite(t)) return 'rgba(120,120,120,0.85)';
@@ -628,7 +628,7 @@ sections:
         custom_fields:
           badge: |
             [[[
-              const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+              const s = states['sensor.YOUR_MACHINE_last_cleaning_time']?.state;
               if (!s || s === 'unavailable' || s === 'unknown') return 'UNKNOWN';
               const t = new Date(s).getTime();
               if (!Number.isFinite(t)) return 'UNKNOWN';
@@ -639,7 +639,7 @@ sections:
             ]]]
           value: |
             [[[
-              const s = states['sensor.YOUR_MACHINE_letzte_reinigungszeit']?.state;
+              const s = states['sensor.YOUR_MACHINE_last_cleaning_time']?.state;
               if (!s || s === 'unavailable' || s === 'unknown') return '—';
               const t = new Date(s).getTime();
               if (!Number.isFinite(t)) return '—';
@@ -746,14 +746,14 @@ sections:
             50% { opacity: 0.6; }
           }
       - type: statistic
-        entity: sensor.YOUR_MACHINE_gesamtzahl_zubereiteter_kaffees
+        entity: sensor.YOUR_MACHINE_total_coffees_made
         period:
           calendar:
             period: week
         stat_type: change
         name: Weekly Shots
       - type: statistic
-        entity: sensor.YOUR_MACHINE_gesamtzahl_zubereiteter_kaffees
+        entity: sensor.YOUR_MACHINE_total_coffees_made
         period:
           calendar:
             period: day
@@ -769,9 +769,9 @@ badges:
     show_name: false
     show_state: true
     show_icon: true
-    entity: sensor.YOUR_MACHINE_gesamtzahl_zubereiteter_kaffees
+    entity: sensor.YOUR_MACHINE_total_coffees_made
   - type: entity
     show_name: false
     show_state: true
     show_icon: true
-    entity: sensor.YOUR_MACHINE_gesamtzahl_durchgefuhrter_spulungen
+    entity: sensor.YOUR_MACHINE_total_flushes_done

@@ -84,24 +84,28 @@ The dashboard supports a background image. Either:
 
 ## Entity Reference
 
-All entities in this dashboard follow the pattern `domain.YOUR_MACHINE_entity_name`.
+All entities follow the pattern `domain.YOUR_MACHINE_entity_suffix`.
 
-| Entity | Description |
-|---|---|
-| `switch.YOUR_MACHINE` | Machine power |
-| `number.YOUR_MACHINE_soll_temperatur_fur_kaffee` | Brew temperature target |
-| `switch.YOUR_MACHINE_dampfkessel` | Steam boiler on/off |
-| `select.YOUR_MACHINE_dampf_stufe` | Steam level (1–3) |
-| `sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels` | Coffee boiler ready time |
-| `sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels` | Steam boiler ready time |
-| `binary_sensor.YOUR_MACHINE_wassertank_leer` | Water tank empty |
-| `sensor.YOUR_MACHINE_letzte_reinigungszeit` | Last machine cleaning time |
-| `sensor.YOUR_MACHINE_gesamtzahl_zubereiteter_kaffees` | Total shots pulled |
-| `sensor.YOUR_MACHINE_gesamtzahl_durchgefuhrter_spulungen` | Total flushes |
-| `sensor.YOUR_MACHINE_startzeit_des_bruhvorgangs` | Brew start time *(used by shot timer)* |
-| `update.YOUR_MACHINE_gateway_firmware` | Gateway firmware update |
-| `sensor.YOUR_MACHINE_shot_timer` | Shot timer *(custom, from configuration.yaml)* |
-| `input_datetime.grinder_last_cleaning` | Grinder cleaning tracker *(helper, manually created)* |
+> **Note on entity names:** Entity suffixes depend on the language set in Home Assistant when the integration was first configured. Use the table below to find the correct suffix for your language.
+
+| Description | English suffix | German suffix |
+|---|---|---|
+| Machine power | `switch.YOUR_MACHINE` | `switch.YOUR_MACHINE` |
+| Brew temperature | `number.YOUR_MACHINE_coffee_target_temperature` | `number.YOUR_MACHINE_soll_temperatur_fur_kaffee` |
+| Steam boiler on/off | `switch.YOUR_MACHINE_steam_boiler` | `switch.YOUR_MACHINE_dampfkessel` |
+| Steam level (1–3) | `select.YOUR_MACHINE_steam_level` | `select.YOUR_MACHINE_dampf_stufe` |
+| Coffee boiler ready time | `sensor.YOUR_MACHINE_coffee_boiler_ready_time` | `sensor.YOUR_MACHINE_bereitschaftszeit_des_kaffeekessels` |
+| Steam boiler ready time | `sensor.YOUR_MACHINE_steam_boiler_ready_time` | `sensor.YOUR_MACHINE_bereitschaftszeit_des_dampfkessels` |
+| Water tank empty | `binary_sensor.YOUR_MACHINE_water_tank_empty` | `binary_sensor.YOUR_MACHINE_wassertank_leer` |
+| Last cleaning time | `sensor.YOUR_MACHINE_last_cleaning_time` | `sensor.YOUR_MACHINE_letzte_reinigungszeit` |
+| Total shots pulled | `sensor.YOUR_MACHINE_total_coffees_made` | `sensor.YOUR_MACHINE_gesamtzahl_zubereiteter_kaffees` |
+| Total flushes | `sensor.YOUR_MACHINE_total_flushes_done` | `sensor.YOUR_MACHINE_gesamtzahl_durchgefuhrter_spulungen` |
+| Brew start time *(shot timer)* | `sensor.YOUR_MACHINE_brewing_start_time` | `sensor.YOUR_MACHINE_startzeit_des_bruhvorgangs` |
+| Gateway firmware | `update.YOUR_MACHINE_gateway_firmware` | `update.YOUR_MACHINE_gateway_firmware` |
+| Shot timer *(custom)* | `sensor.YOUR_MACHINE_shot_timer` | `sensor.YOUR_MACHINE_shot_timer` |
+| Grinder tracker *(helper)* | `input_datetime.grinder_last_cleaning` | `input_datetime.grinder_last_cleaning` |
+
+The included `dashboard.yaml` uses **English** entity suffixes. If your HA is set to German, use the find & replace approach from Step 4 with the German suffixes from the table above.
 
 ## Compatibility
 
