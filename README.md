@@ -2,7 +2,11 @@
 
 A feature-rich Home Assistant dashboard for La Marzocco espresso machines (Linea Micra, Linea Mini and others).
 
-![La Marzocco Dashboard](screenshot.png)
+![Setup](setup.png)
+
+*La Marzocco Linea Micra with the dashboard running on a tablet mounted right next to the machine.*
+
+![Dashboard](screenshot.png)
 
 ## Features
 
