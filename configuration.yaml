@@ -1,9 +1,13 @@
-# La Marzocco Shot Timer
+# La Marzocco – Shot Timer & Last Shot Duration
 # Add this to your configuration.yaml (or include it via packages/split config)
 #
 # Replace YOUR_MACHINE with your machine's entity prefix (e.g. linea_micra)
+# Replace YOUR_MACHINE_BREWING_START with the correct entity for your language:
+#   English: sensor.YOUR_MACHINE_brewing_start_time
+#   German:  sensor.YOUR_MACHINE_startzeit_des_bruhvorgangs
 #
 template:
+  # Shot Timer – counts seconds live during extraction, resets to READY when done
   - trigger:
       - platform: time_pattern
         seconds: "/1"
@@ -11,7 +15,7 @@ template:
       - name: YOUR_MACHINE Shot Timer
         unique_id: YOUR_MACHINE_shot_timer
         state: >
-          {% set s = states('sensor.YOUR_MACHINE_startzeit_des_bruhvorgangs') %}
+          {% set s = states('sensor.YOUR_MACHINE_brewing_start_time') %}
           {% if s in ['unknown','unavailable',''] %}
             READY
           {% else %}
@@ -21,4 +25,28 @@ template:
             {% else %}
               {{ (as_timestamp(now()) - t) | int }}
             {% endif %}
+          {% endif %}
+
+  # Last Shot Duration – stores the duration of the last completed shot
+  - trigger:
+      - platform: state
+        entity_id: sensor.YOUR_MACHINE_brewing_start_time
+        to:
+          - "unknown"
+          - "unavailable"
+    sensor:
+      - name: YOUR_MACHINE Last Shot Duration
+        unique_id: YOUR_MACHINE_last_shot_duration
+        unit_of_measurement: s
+        state: >
+          {% set start = trigger.from_state.state %}
+          {% if start not in ['unknown', 'unavailable', ''] %}
+            {% set t = as_timestamp(start, default=none) %}
+            {% if t is not none %}
+              {{ (as_timestamp(trigger.event.time_fired) - t) | int }}
+            {% else %}
+              {{ states('sensor.YOUR_MACHINE_last_shot_duration') }}
+            {% endif %}
+          {% else %}
+            {{ states('sensor.YOUR_MACHINE_last_shot_duration') }}
           {% endif %}

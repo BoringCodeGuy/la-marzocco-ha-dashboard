@@ -229,6 +229,62 @@ sections:
               const secs = Math.max(0, Number(s) || 0);
               return `${secs}s`;
             ]]]
+      - type: custom:button-card
+        entity: sensor.YOUR_MACHINE_last_shot_duration
+        name: Last Shot
+        icon: mdi:history
+        show_icon: true
+        show_name: true
+        show_state: false
+        tap_action:
+          action: more-info
+        styles:
+          card:
+            - border-radius: 16px
+            - padding: 16px
+            - height: 140px
+            - background: |
+                [[[
+                  const s = Number(states['sensor.YOUR_MACHINE_last_shot_duration']?.state);
+                  if (!s) return 'var(--card-background-color)';
+                  if (s >= 25 && s <= 35) return 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))';
+                  if ((s >= 20 && s < 25) || (s > 35 && s <= 40)) return 'linear-gradient(135deg, rgba(255,170,0,0.18), rgba(0,0,0,0))';
+                  return 'linear-gradient(135deg, rgba(220,0,0,0.20), rgba(0,0,0,0))';
+                ]]]
+          grid:
+            - grid-template-areas: '"i n" "i value"'
+            - grid-template-columns: 44px 1fr
+            - grid-template-rows: min-content 1fr
+            - column-gap: 12px
+            - row-gap: 6px
+            - align-items: center
+          icon:
+            - width: 34px
+            - color: |
+                [[[
+                  const s = Number(states['sensor.YOUR_MACHINE_last_shot_duration']?.state);
+                  if (!s) return 'var(--primary-text-color)';
+                  if (s >= 25 && s <= 35) return 'rgba(0,200,0,0.95)';
+                  if ((s >= 20 && s < 25) || (s > 35 && s <= 40)) return 'rgba(255,170,0,0.95)';
+                  return 'rgba(255,60,60,0.95)';
+                ]]]
+          name:
+            - font-size: 14px
+            - font-weight: 700
+            - opacity: 0.9
+          custom_fields:
+            value:
+              - font-size: 54px
+              - font-weight: 800
+              - line-height: 1.05
+        custom_fields:
+          value: |
+            [[[
+              const s = states['sensor.YOUR_MACHINE_last_shot_duration']?.state;
+              if (!s || s === 'unknown' || s === 'unavailable') return '—';
+              const secs = Math.max(0, Number(s) || 0);
+              return `${secs}s`;
+            ]]]
       - type: conditional
         conditions:
           - entity: switch.YOUR_MACHINE
