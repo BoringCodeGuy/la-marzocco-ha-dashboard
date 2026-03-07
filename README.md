@@ -13,7 +13,8 @@ A feature-rich Home Assistant dashboard for La Marzocco espresso machines (Linea
 - **Power toggle** with animated status indicator
 - **Brew temperature** gauge
 - **Steam level** display and boiler toggle
-- **Shot timer** – counts seconds live during extraction
+- **Shot timer** – counts seconds live during extraction, resets to READY when done
+- **Last shot duration** – displays the duration of the last completed shot with quality color indicator (green 25–27s, yellow 28–30s, red otherwise)
 - **Coffee & steam boiler** warm-up countdown
 - **Water tank** status with alert
 - **Machine cleaning** status (color-coded by days since last clean)
@@ -46,25 +47,14 @@ Go to **Settings → Devices & Services → Helpers → Create Helper**:
 |---|---|---|
 | Date/Time | Grinder Last Cleaning | `input_datetime.grinder_last_cleaning` |
 
-### Step 3 – Add the Shot Timer sensor
+### Step 3 – Add the template sensors
 
-Add the contents of `configuration.yaml` to your HA `configuration.yaml`.
+Add the contents of `configuration.yaml` to your HA `configuration.yaml`. This adds two sensors:
 
-Replace `YOUR_MACHINE` with your machine's entity prefix (e.g. `linea_micra`).
+- **Shot Timer** – counts seconds live during extraction
+- **Last Shot Duration** – stores the duration of the last completed shot
 
-**Example for a Linea Micra:**
-```yaml
-template:
-  - trigger:
-      - platform: time_pattern
-        seconds: "/1"
-    sensor:
-      - name: Linea Micra Shot Timer
-        unique_id: linea_micra_shot_timer
-        state: >
-          {% set s = states('sensor.linea_micra_startzeit_des_bruhvorgangs') %}
-          ...
-```
+Replace `YOUR_MACHINE` with your machine's entity prefix (e.g. `linea_micra`) and use the correct brewing start time entity for your language (see Entity Reference table below).
 
 After editing, restart Home Assistant.
 
@@ -107,6 +97,7 @@ All entities follow the pattern `domain.YOUR_MACHINE_entity_suffix`.
 | Brew start time *(shot timer)* | `sensor.YOUR_MACHINE_brewing_start_time` | `sensor.YOUR_MACHINE_startzeit_des_bruhvorgangs` |
 | Gateway firmware | `update.YOUR_MACHINE_gateway_firmware` | `update.YOUR_MACHINE_gateway_firmware` |
 | Shot timer *(custom)* | `sensor.YOUR_MACHINE_shot_timer` | `sensor.YOUR_MACHINE_shot_timer` |
+| Last shot duration *(custom)* | `sensor.YOUR_MACHINE_last_shot_duration` | `sensor.YOUR_MACHINE_last_shot_duration` |
 | Grinder tracker *(helper)* | `input_datetime.grinder_last_cleaning` | `input_datetime.grinder_last_cleaning` |
 
 The included `dashboard.yaml` uses **English** entity suffixes. If your HA is set to German, use the find & replace approach from Step 4 with the German suffixes from the table above.
