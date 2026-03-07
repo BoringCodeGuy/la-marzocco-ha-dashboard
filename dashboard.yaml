@@ -247,8 +247,8 @@ sections:
                 [[[
                   const s = Number(states['sensor.YOUR_MACHINE_last_shot_duration']?.state);
                   if (!s) return 'var(--card-background-color)';
-                  if (s >= 25 && s <= 35) return 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))';
-                  if ((s >= 20 && s < 25) || (s > 35 && s <= 40)) return 'linear-gradient(135deg, rgba(255,170,0,0.18), rgba(0,0,0,0))';
+                  if (s >= 25 && s <= 27) return 'linear-gradient(135deg, rgba(0,180,90,0.22), rgba(0,0,0,0))';
+                  if (s >= 28 && s <= 30) return 'linear-gradient(135deg, rgba(255,170,0,0.18), rgba(0,0,0,0))';
                   return 'linear-gradient(135deg, rgba(220,0,0,0.20), rgba(0,0,0,0))';
                 ]]]
           grid:
@@ -264,8 +264,8 @@ sections:
                 [[[
                   const s = Number(states['sensor.YOUR_MACHINE_last_shot_duration']?.state);
                   if (!s) return 'var(--primary-text-color)';
-                  if (s >= 25 && s <= 35) return 'rgba(0,200,0,0.95)';
-                  if ((s >= 20 && s < 25) || (s > 35 && s <= 40)) return 'rgba(255,170,0,0.95)';
+                  if (s >= 25 && s <= 27) return 'rgba(0,200,0,0.95)';
+                  if (s >= 28 && s <= 30) return 'rgba(255,170,0,0.95)';
                   return 'rgba(255,60,60,0.95)';
                 ]]]
           name:
