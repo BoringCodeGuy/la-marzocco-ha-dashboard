@@ -44,7 +44,7 @@ template:
           {% if start not in ['unknown', 'unavailable', ''] %}
             {% set t = as_timestamp(start, default=none) %}
             {% if t is not none %}
-              {{ (as_timestamp(trigger.event.time_fired) - t) | int }}
+              {{ (as_timestamp(now()) - t) | int }}
             {% else %}
               {{ states('sensor.YOUR_MACHINE_last_shot_duration') }}
             {% endif %}
