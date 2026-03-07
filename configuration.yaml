@@ -31,9 +31,10 @@ template:
   - trigger:
       - platform: state
         entity_id: sensor.YOUR_MACHINE_brewing_start_time
-        to:
-          - "unknown"
-          - "unavailable"
+        to: "unknown"
+      - platform: state
+        entity_id: sensor.YOUR_MACHINE_brewing_start_time
+        to: "unavailable"
     sensor:
       - name: YOUR_MACHINE Last Shot Duration
         unique_id: YOUR_MACHINE_last_shot_duration
